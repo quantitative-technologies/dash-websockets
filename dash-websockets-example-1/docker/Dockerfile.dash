@@ -1,0 +1,9 @@
+FROM python:3.12-slim
+WORKDIR /app
+COPY apps/dash_app.py .
+# Install Node.js and wscat
+RUN apt-get update && apt-get install -y nodejs npm && npm install -g wscat
+# Install Dash and Dash Extensions
+RUN pip install dash dash-extensions
+EXPOSE 8050
+CMD ["python", "dash_app.py"]

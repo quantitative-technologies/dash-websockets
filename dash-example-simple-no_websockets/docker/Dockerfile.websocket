@@ -1,0 +1,6 @@
+FROM python:3.12-slim
+WORKDIR /app
+COPY apps/server.py .
+RUN pip install websockets
+EXPOSE 5000
+CMD ["python", "server.py"]

@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(description="WebSocket Server")
 parser.add_argument('--port', type=int, default=5000, help='WebSocket server port')
 args = parser.parse_args()
 
-WEBSOCKET_HOST = 'localhost'
+WEBSOCKET_HOST = 'websocket-server'
 WEBSOCKET_PORT = args.port
 
 connected = set()

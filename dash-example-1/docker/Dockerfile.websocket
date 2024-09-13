@@ -1,6 +1,6 @@
 FROM python:3.12-slim
+RUN pip install quart
 WORKDIR /app
 COPY apps/websocket_server.py .
-RUN pip install quart
 EXPOSE 5000
 CMD ["python", "websocket_server.py"]

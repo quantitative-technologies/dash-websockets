@@ -13,4 +13,4 @@ async def random_data():
         await asyncio.sleep(1)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host='websocket-server', port=5000)

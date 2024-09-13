@@ -1,10 +1,24 @@
+import argparse
 import logging
 from dash_extensions import WebSocket
 from dash_extensions.enrich import html, dcc, Output, Input, DashProxy
 import dash
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(filename)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 logger = logging.getLogger(__name__)
+
+# Parse command line arguments
+parser = argparse.ArgumentParser(description="Dash WebSocket Client")
+parser.add_argument('--host', type=str, default='websocket-server', help='WebSocket server host')
+parser.add_argument('--port', type=int, default=5000, help='WebSocket server port')
+args = parser.parse_args()
+
+WEBSOCKET_HOST = args.host
+WEBSOCKET_PORT = args.port
 
 app = DashProxy(__name__, suppress_callback_exceptions=True)
 

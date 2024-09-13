@@ -44,7 +44,6 @@ app.layout = html.Div([
         data=[],
         style_table={'height': '300px', 'overflowY': 'auto'}
     ),
-    dcc.Store(id='websocket-store'),
     dcc.Interval(id='interval-component', interval=500, n_intervals=0)
 ])
 
@@ -75,7 +74,6 @@ def run_websocket():
 threading.Thread(target=run_websocket, daemon=True).start()
 
 @app.callback(
-    Output('websocket-store', 'data'),
     Input('send-button', 'n_clicks'),
     State('input-box', 'value'),
     prevent_initial_call=True
@@ -85,10 +83,8 @@ def send_message(n_clicks, value):
         try:
             ws_app.send(json.dumps({"type": "message", "content": value}))
             logger.info(f"Sent message: {value}")
-            return {"type": "sent", "content": value}
         except Exception as e:
             logger.error(f"Failed to send message: {e}")
-            return {"type": "error", "content": str(e)}
 
 @app.callback(
     [Output('output-div', 'children'),

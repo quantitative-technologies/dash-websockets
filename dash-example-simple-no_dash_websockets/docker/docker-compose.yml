@@ -20,7 +20,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.dash
     ports:
-      - "8052:8050"
+      - "8050:8050"
     depends_on:
       - websocket-server
     networks:

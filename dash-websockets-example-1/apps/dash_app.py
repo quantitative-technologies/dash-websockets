@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 app = DashProxy(__name__, suppress_callback_exceptions=True)
 
 app.layout = html.Div([
-    WebSocket(id="ws", url="ws://127.0.0.1:5000/random_data"),
+    WebSocket(id="ws", url="ws://websocket-server:5000/random_data"),
     dcc.Graph(id="graph"),
     html.Div(id="connection-status"),
     html.Div(id="data-received")

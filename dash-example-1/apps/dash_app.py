@@ -28,7 +28,8 @@ app.layout = html.Div([
     WebSocket(id="ws", url=f"ws://{args.host}:{args.port}/random_data"),
     dcc.Graph(id="graph"),
     html.Div(id="connection-status"),
-    html.Div(id="data-received")
+    html.Div(id="data-received"),
+    html.Div(id="websocket-url")
 ])
 
 @app.callback(Output("connection-status", "children"), Input("ws", "state"))
@@ -40,6 +41,11 @@ def update_connection_state(state):
 def display_message(message):
     logger.debug(f"Received WebSocket message: {message}")
     return f"Last received data: {message}"
+
+@app.callback(Output("websocket-url", "children"), Input("ws", "url"))
+def display_url(url):
+    logger.debug(f"WebSocket URL: {url}")
+    return f"WebSocket URL: {url}"
 
 update_graph = """
 function(msg) {

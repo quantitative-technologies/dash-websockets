@@ -11,19 +11,21 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+DASH_HOST_DEFAULT = '0.0.0.0'
+WEBSOCKET_HOST_DEFAULT = 'websocket-server'
+WEBSOCKET_PORT_DEFAULT = 5000
+
 # Parse command line arguments
 parser = argparse.ArgumentParser(description="Dash WebSocket Client")
-parser.add_argument('--host', type=str, default='websocket-server', help='WebSocket server host')
-parser.add_argument('--port', type=int, default=5000, help='WebSocket server port')
+parser.add_argument('--dash-host', type=str, default=DASH_HOST_DEFAULT, help=f'Dash app host. Default: {DASH_HOST_DEFAULT}')
+parser.add_argument('--host', type=str, default=WEBSOCKET_HOST_DEFAULT, help=f'WebSocket server host. Default: {WEBSOCKET_HOST_DEFAULT}')
+parser.add_argument('--port', type=int, default=WEBSOCKET_PORT_DEFAULT, help=f'WebSocket server port. Default: {WEBSOCKET_PORT_DEFAULT}')
 args = parser.parse_args()
-
-WEBSOCKET_HOST = args.host
-WEBSOCKET_PORT = args.port
 
 app = DashProxy(__name__, suppress_callback_exceptions=True)
 
 app.layout = html.Div([
-    WebSocket(id="ws", url="ws://websocket-server:5000/random_data"),
+    WebSocket(id="ws", url=f"ws://{args.host}:{args.port}/random_data"),
     dcc.Graph(id="graph"),
     html.Div(id="connection-status"),
     html.Div(id="data-received")
@@ -56,4 +58,5 @@ app.clientside_callback(update_graph, Output("graph", "figure"), Input("ws", "me
 
 if __name__ == "__main__":
     logger.info("Starting Dash app")
-    app.run_server(host="0.0.0.0", port=8050, debug=True)
+    logger.info(f"Connecting to WebSocket server at ws://{args.host}:{args.port}/random_data")
+    app.run_server(host=args.dash_host, port=8050, debug=True)

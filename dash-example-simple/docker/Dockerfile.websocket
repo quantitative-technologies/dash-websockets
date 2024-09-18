@@ -1,6 +1,5 @@
 FROM python:3.12-slim
 WORKDIR /app
+RUN pip install quart uvicorn
 COPY apps/server.py .
-RUN pip install websockets
-EXPOSE 5000
-CMD ["python", "server.py"]
+CMD ["python", "-m", "uvicorn", "server:app", "--port", "80", "--host", "0.0.0.0"]

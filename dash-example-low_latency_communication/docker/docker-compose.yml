@@ -1,0 +1,23 @@
+# Docker Compose file version: v2.x
+# This configuration requires Docker Compose V2 (docker-compose-v2 package)
+# Compatibility: Docker Engine 19.03.0+
+# For more information, visit: https://docs.docker.com/compose/compose-file/
+
+name: dash-websockets-low_latency_communication
+
+services:
+  websocket-server:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.websocket
+    ports:
+      - "5000:80"
+
+  dash-app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dash
+    ports:
+      - "8050:80"
+    depends_on:
+      - websocket-server

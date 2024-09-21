@@ -1,8 +1,6 @@
 # dash_app.py
 
 import json
-import logging
-import argparse
 
 import dash
 import pandas as pd
@@ -10,18 +8,8 @@ from dash import dash_table, dcc, html
 from dash.dependencies import Input, Output, State
 from dash_extensions import WebSocket
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-# Parse command line arguments
-parser = argparse.ArgumentParser(description="Dash WebSocket Client")
-parser.add_argument('--port', type=int, default=5000, help='WebSocket server port')
-args = parser.parse_args()
-
-WEBSOCKET_HOST = 'websocket-server'
-WEBSOCKET_PORT = args.port
-
 app = dash.Dash(__name__)
+server = app.server
 
 app.layout = html.Div([
     html.H1("Dash WebSocket Client with DataTable"),
@@ -34,7 +22,7 @@ app.layout = html.Div([
         data=[],
         style_table={'height': '300px', 'overflowY': 'auto'}
     ),
-    WebSocket(url=f"ws://{WEBSOCKET_HOST}:{WEBSOCKET_PORT}", id="ws")
+    WebSocket(url=f"ws://localhost:5000/ws", id="ws")
 ])
 
 @app.callback(
@@ -44,8 +32,8 @@ app.layout = html.Div([
     prevent_initial_call=False
 )
 def send_message(n_clicks, value):
+    """ Send message to the server"""
     if n_clicks:
-        logger.info(f"Sending message: {value}")
         return json.dumps({"type": "message", "content": value})
 
 @app.callback(
@@ -53,6 +41,7 @@ def send_message(n_clicks, value):
     Input("ws", "message")
 )
 def update_output(message):
+    """ Update displayed output with message received from server"""
     if message is None:
         return "No messages received yet."
     data = json.loads(message["data"])
@@ -65,6 +54,7 @@ def update_output(message):
     Input("ws", "message")
 )
 def update_table(message):
+    """ Update DataTable with data received from server"""
     if message is None:
         return []
     data = json.loads(message["data"])
@@ -74,5 +64,4 @@ def update_table(message):
     return dash.no_update
 
 if __name__ == '__main__':
-    logger.info(f"Connecting to WebSocket server at ws://{WEBSOCKET_HOST}:{WEBSOCKET_PORT}")
-    app.run_server(debug=True, host='0.0.0.0', port=8050)
+    app.run_server()

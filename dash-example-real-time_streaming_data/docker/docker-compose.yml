@@ -3,7 +3,7 @@
 # Compatibility: Docker Engine 19.03.0+
 # For more information, visit: https://docs.docker.com/compose/compose-file/
 
-name: websocket-dash-app
+name: dash-websockets-real_time_streaming_data
 
 services:
   websocket-server:

@@ -1,21 +1,28 @@
-# dash-websockets
+# `dash-websockets` with `docker`
 
-Demonstrate issue with the extension.
+These examples demonstrate using the `dash-websockets` dash extension with dockers. 
 
-## `dash-example-1-original`
+In all the examples, the servers are run by the docker via `uvicorn` and the clients are run via `gunicorn`. 
 
-This is the [original code](https://www.dash-extensions.com/components/websocket) from the `Real-time data streaming` example in the 
- `dash-extensions` documentation.
+The dockers can be started with
 
- ## `dash-example-1`
+```console
+docker compose up --build
+```
 
- This is a dockerized version of `dash-example-1-original`, with additional diagnostics in the client app (`dash_app.py`).
+Then the dash app can be viewed by pointing a brower `<ip_address>:8050` where `ip_address=localhost` when run locally, 
+or else it could be a server adddress.
 
- ## `dash-example-1-no_dash_websockets`
+## `dash-example-real-time_streaming_data`
 
- This is an unpleasant workaround where the websocket is run in a separate thread, and `dcc.Interval` is used to trigger callbacks. 
+This is a dockerized version of the [original code](https://www.dash-extensions.com/components/websocket) from the `Real-time data streaming` example in the 
+ `dash-extensions` documentation, of a graph that updates in real-time. The websocket is served by the `Quart` framework (which the docker exposes with `uvicorn`).
 
- ## `dash-example-simple` and `dash-example-simple-no_dash_websockets`
+## `dash-example-low_latency_communication`
 
- Another simple client demonstrating these issues, that renders a `DataTable` rather than a graph.
+This is a dockerized version of the [Low latency communication](https://www.dash-extensions.com/components/websocket#:~:text=will%20work%20too.-,Low%20latency%20communication,-As%20the%20websocket) example from the `dash-extensions` documentation, demonstrating two-way communication with the `dash-websockets` extension.
 
+## `dash-example-simple`
+
+This is a simple dash app whith two-way communication as well as a `DataTable` showing real-time updates. 
+The server uses the `FastAPI` framework.
